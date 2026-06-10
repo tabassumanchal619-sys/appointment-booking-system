@@ -16,14 +16,17 @@ app.use("/api", serviceRoutes);
 app.get("/", (req, res) => {
     res.send("Backend is running 🚀");
 });
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "OK",
+        message: "Server is running"
+    });
+});
 app.get("/api/profile", verifyToken, (req, res) => {
     res.json({
         message: "Protected route accessed successfully",
         user: req.user
     });
-});
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
 });
 app.listen(5000, () => {
     console.log("Server running on port 5000");
