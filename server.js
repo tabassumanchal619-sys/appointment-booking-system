@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./src/routes/auth");
 const serviceRoutes = require("./src/routes/service");
@@ -12,11 +13,18 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
-app.use("/api", authRoutes);
-app.use("/api", serviceRoutes);
+/**
+ * ROUTES
+ * FIX: correct route mounting for auth
+ */
+app.use("/api/auth", authRoutes);
+app.use("/api/service", serviceRoutes);
 
-// Routes
+/**
+ * TEST ROUTES
+ */
 app.get("/", (req, res) => {
     res.send("Backend is running 🚀");
 });
@@ -28,6 +36,9 @@ app.get("/health", (req, res) => {
     });
 });
 
+/**
+ * PROTECTED ROUTE
+ */
 app.get("/api/profile", verifyToken, (req, res) => {
     res.json({
         message: "Protected route accessed successfully",
@@ -35,6 +46,9 @@ app.get("/api/profile", verifyToken, (req, res) => {
     });
 });
 
+/**
+ * START SERVER AFTER DB CONNECTION
+ */
 const PORT = process.env.PORT || 5000;
 
 db.authenticate()

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-
 // CREATE SERVICE (ADMIN)
 router.post("/services", (req, res) => {
     const { name, description, duration, price } = req.body;

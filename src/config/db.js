@@ -1,12 +1,13 @@
 const { Sequelize } = require("sequelize");
+require("dotenv").config(); // important if not already in app.js
 
 const sequelize = new Sequelize(
-  "appointment_db",   // database name
-  "root",             // mysql username
-  "root619",                 // mysql password (put yours if any)
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
   {
-    host: "localhost",
-    dialect: "mysql",
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
     logging: false
   }
 );
