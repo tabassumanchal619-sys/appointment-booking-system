@@ -24,9 +24,15 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     refreshToken: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    }
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+
+  
+  role: {
+    type: DataTypes.STRING,
+    defaultValue: "user"
+  }
 
   }, {
   sequelize,

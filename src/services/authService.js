@@ -31,15 +31,16 @@ const loginUser = async (email, password) => {
 
     // 3. ACCESS TOKEN (short life → API access)
     const accessToken = jwt.sign(
-        {
-            id: user.id,
-            email: user.email
-        },
-        process.env.JWT_ACCESS_SECRET,
-        {
-            expiresIn: "15m"
-        }
-    );
+  {
+    id: user.id,
+    email: user.email,
+    role: user.role   // ✅ ADD THIS LINE
+  },
+  process.env.JWT_ACCESS_SECRET,
+  {
+    expiresIn: "15m"
+  }
+);
 
     // 4. REFRESH TOKEN (long life → cookie + DB)
     const refreshToken = jwt.sign(

@@ -39,5 +39,11 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
+db.sequelize.sync({ alter: true })
+  .then(() => {
+    console.log("Database & tables synced successfully");
+  })
+  .catch((err) => {
+    console.error("Sync error:", err);
+  });
 module.exports = db;

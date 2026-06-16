@@ -14,13 +14,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-
+app.use((req, res, next) => {
+    console.log("REQUEST:", req.method, req.url);
+    next();
+});
 /**
  * ROUTES
  * FIX: correct route mounting for auth
  */
 app.use("/api/auth", authRoutes);
-app.use("/api/service", serviceRoutes);
+app.use("/api/services", require("./src/routes/service"));
+app.use("/api/appointments", require("./src/routes/appointment"));
 
 /**
  * TEST ROUTES
@@ -51,14 +55,20 @@ app.get("/api/profile", verifyToken, (req, res) => {
  */
 const PORT = process.env.PORT || 5000;
 
-db.authenticate()
-    .then(() => {
+const startServer = async () => {
+    try {
+        await db.authenticate();
         console.log("Database connected successfully");
+
+        await db.sync({ alter: true });
 
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    })
-    .catch((err) => {
+
+    } catch (err) {
         console.error("Database connection failed:", err);
-    });
+    }
+};
+
+startServer();
