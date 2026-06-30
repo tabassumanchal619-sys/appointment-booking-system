@@ -2,58 +2,133 @@ const serviceService = require("../services/serviceService");
 
 // CREATE
 const createService = async (req, res) => {
-  try {
-    const service = await serviceService.createService(req.body);
-    res.status(201).json(service);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+    try {
+
+        const service = await serviceService.createService(req.body);
+
+        res.status(201).json({
+            success: true,
+            message: "Service created successfully.",
+            service
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
 };
 
-// GET ALL
+// GET ALL (SEARCH & FILTER)
 const getAllServices = async (req, res) => {
-  try {
-    const services = await serviceService.getAllServices();
-    res.json(services);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+
+    try {
+
+        const services = await serviceService.getAllServices(req.query);
+
+        res.status(200).json({
+            success: true,
+            services
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
 };
 
 // GET ONE
 const getServiceById = async (req, res) => {
-  try {
-    const service = await serviceService.getServiceById(req.params.id);
-    res.json(service);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+
+    try {
+
+        const service = await serviceService.getServiceById(req.params.id);
+
+        if (!service) {
+            return res.status(404).json({
+                success: false,
+                message: "Service not found."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            service
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
 };
 
 // UPDATE
 const updateService = async (req, res) => {
-  try {
-    await serviceService.updateService(req.params.id, req.body);
-    res.json({ message: "Service updated" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+
+    try {
+
+        const service = await serviceService.updateService(
+            req.params.id,
+            req.body
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Service updated successfully.",
+            service
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
 };
 
 // DELETE
 const deleteService = async (req, res) => {
-  try {
-    await serviceService.deleteService(req.params.id);
-    res.json({ message: "Service deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+
+    try {
+
+        await serviceService.deleteService(req.params.id);
+
+        res.status(200).json({
+            success: true,
+            message: "Service deleted successfully."
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
 };
 
 module.exports = {
-  createService,
-  getAllServices,
-  getServiceById,
-  updateService,
-  deleteService
+    createService,
+    getAllServices,
+    getServiceById,
+    updateService,
+    deleteService
 };
